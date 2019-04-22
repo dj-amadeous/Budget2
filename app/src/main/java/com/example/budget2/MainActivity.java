@@ -1,5 +1,6 @@
 package com.example.budget2;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,15 +48,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mLoginB.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String emailLogin = mEmail.getText().toString();
+                String pwLogin = mPassword.getText().toString();
+                signIn(emailLogin, pwLogin);
+            }
+        });
+
 
     }
 
-    @Override
-    public void onStart(){
+    //@Override
+    /*public void onStart(){
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-    }
+    }*/
 
     private void createAccount(String email, String password){
        mAuth.createUserWithEmailAndPassword(email, password)
@@ -73,11 +83,40 @@ public class MainActivity extends AppCompatActivity {
                            Toast.makeText(MainActivity.this, "Authentication failed.",
                                    Toast.LENGTH_SHORT).show();
                            updateUI(null);
+                           //TODO create a warning  that password must be at least 6 characters
                        }
                    }
                });
     }
 
+    private void signIn(String email, String password){
+        Log.d(TAG, "signIn:" + email);
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
+    }
+
     private void updateUI(FirebaseUser currentUser) {
+        if(currentUser != null){
+            Intent intent = new Intent(this, myAccountActivity.class);
+            startActivity(intent);
+        } else {
+            mEmail.setText("");
+            mPassword.setText("");
+        }
     }
 }

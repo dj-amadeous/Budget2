@@ -3,4 +3,5 @@
     <string name="appName">Budget Blender</string>
     <string name="noAccount">Don\'t have an account?</string>
     <string name="signUp">Sign up here</string>
+    <string name="log_out">Log Out</string>
 </resources>
