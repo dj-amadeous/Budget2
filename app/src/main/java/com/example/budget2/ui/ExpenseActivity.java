@@ -25,7 +25,7 @@ public class ExpenseActivity extends AppCompatActivity {
     private EditText mSubcategoryE, mNoteE;
     private Date mDate;
     private String mDateS;
-    private EditText mDateE;
+    private Button mDateE;
     private Expense mExpense;
 
     @Override
@@ -39,7 +39,7 @@ public class ExpenseActivity extends AppCompatActivity {
         mCategoryE = (EditText)findViewById(R.id.category);
         mSubcategoryE = (EditText)findViewById(R.id.subcategory);
         mNoteE = (EditText)findViewById(R.id.note);
-        mDateE = (EditText)findViewById(R.id.date);
+        mDateE = (Button)findViewById(R.id.date);
 
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +52,10 @@ public class ExpenseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAmountS = mAmountE.getText().toString();
+                mCategoryS = mCategoryE.getText().toString();
                 try{
                     mAmount = Double.parseDouble(mAmountS);
+                    mCategory = Integer.parseInt(mCategoryS);
                 } catch(NumberFormatException nfe){
                     Toast.makeText(ExpenseActivity.this,
                             "That's not a number you dumb dumb",

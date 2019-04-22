@@ -50,15 +50,12 @@
             android:hint="Subcategory (optional)"
             android:inputType="textPersonName" />
 
-        <EditText
+        <Button
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/edit_text_back_ground_green"
-            android:ems="10"
-            android:hint="Date"
-            android:inputType="textPersonName" />
+            android:text="Date" />
 
         <EditText
             android:id="@+id/note"
