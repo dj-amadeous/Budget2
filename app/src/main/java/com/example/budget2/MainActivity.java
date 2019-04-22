@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //@Override
-    /*public void onStart(){
+    public void onStart(){
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-    }*/
+    }
 
     private void createAccount(String email, String password){
        mAuth.createUserWithEmailAndPassword(email, password)
