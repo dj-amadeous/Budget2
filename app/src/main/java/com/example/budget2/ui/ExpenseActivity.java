@@ -84,7 +84,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                     finish();
                 }
 
-                mExpense = new Expense(mAmount, mDateS, mCategory, mNoteS, mSubcategoryS);
+                mExpense = new Expense(mAmount, mDateS, mCategory, mNoteS, mSubcategoryS, ++myAccountActivity.EXPENSE_ID);
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("Expense", mExpense);
                 setResult(Activity.RESULT_OK, resultIntent);

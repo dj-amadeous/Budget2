@@ -10,13 +10,15 @@ public class Expense implements Parcelable {
     private int category;
     private String note;
     private String subCategory;
+    Integer id;
 
-    public Expense(double amount, String date, int category, String note, String subCategory) {
+    public Expense(double amount, String date, int category, String note, String subCategory, Integer id) {
         this.amount = amount;
         this.date = date;
         this.category = category;
         this.note = note;
         this.subCategory = subCategory;
+        this.id = id;
     }
 
     protected Expense(Parcel in) {
@@ -24,6 +26,7 @@ public class Expense implements Parcelable {
         category = in.readInt();
         note = in.readString();
         subCategory = in.readString();
+        id = in.readInt();
     }
 
     public static final Creator<Expense> CREATOR = new Creator<Expense>() {
@@ -68,6 +71,8 @@ public class Expense implements Parcelable {
     public void setSubCategory(String subCategory) {
         this.subCategory = subCategory;
     }
+    public Integer getId() {return id;}
+
 
     @Override
     public int describeContents() {
@@ -80,5 +85,6 @@ public class Expense implements Parcelable {
         dest.writeInt(category);
         dest.writeString(note);
         dest.writeString(subCategory);
+        dest.writeInt(id);
     }
 }

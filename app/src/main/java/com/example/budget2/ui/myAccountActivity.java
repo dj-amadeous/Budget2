@@ -10,6 +10,8 @@ import android.widget.Button;
 import com.example.budget2.R;
 import com.example.budget2.model.Expense;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -24,8 +26,10 @@ public class myAccountActivity extends AppCompatActivity {
     private GraphView graph;
     private Expense tempExpense;
     static final int ADD_EXPENSE_REQUEST = 1;
+    public static Integer EXPENSE_ID = 0;
     //this must be of type ArrayList, you cannot use the List interface because of the putParcelableArrayListExtra method
     public ArrayList<Expense> expenseRecords;
+    DatabaseReference mRootRef =  FirebaseDatabase.getInstance().getReference();
 
 
     @Override
@@ -39,6 +43,8 @@ public class myAccountActivity extends AppCompatActivity {
         graph = (GraphView)findViewById(R.id.graph);
         expenseRecords = new ArrayList<Expense>();
 
+
+        mRootRef.setValue("Hello, world");
 
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
@@ -62,7 +68,6 @@ public class myAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent expenseIntent = new Intent(myAccountActivity.this, ExpenseActivity.class);
-                //expenseIntent.putParcelableArrayListExtra("expenseRecords", expenseRecords);
                 startActivityForResult(expenseIntent, ADD_EXPENSE_REQUEST);
 
 
@@ -82,8 +87,11 @@ public class myAccountActivity extends AppCompatActivity {
         if(requestCode == ADD_EXPENSE_REQUEST){
             if(resultCode == RESULT_OK){
                 tempExpense = data.getParcelableExtra("Expense");
-                expenseRecords.add(tempExpense);
-                Log.d("Expense test", expenseRecords.get(0).getNote());
+                //expenseRecords.add(tempExpense);
+                //Log.d("Expense test", expenseRecords.get(0).getNote());
+                //TODO push temp expense to the database right here
+                mRootRef.child("Expenses").child(tempExpense.getId().toString()).setValue(tempExpense);
+
             }
         }
     }
