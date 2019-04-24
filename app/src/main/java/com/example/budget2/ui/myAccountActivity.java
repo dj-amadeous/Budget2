@@ -3,6 +3,7 @@ package com.example.budget2.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -63,7 +64,9 @@ public class myAccountActivity extends AppCompatActivity {
                 Intent expenseIntent = new Intent(myAccountActivity.this, ExpenseActivity.class);
                 //expenseIntent.putParcelableArrayListExtra("expenseRecords", expenseRecords);
                 startActivityForResult(expenseIntent, ADD_EXPENSE_REQUEST);
-                expenseRecords.add(tempExpense);
+
+
+                //Log.d("Expense test", expenseRecords.get(0).getNote());
             }
         });
 
@@ -79,8 +82,9 @@ public class myAccountActivity extends AppCompatActivity {
         if(requestCode == ADD_EXPENSE_REQUEST){
             if(resultCode == RESULT_OK){
                 tempExpense = data.getParcelableExtra("Expense");
+                expenseRecords.add(tempExpense);
+                Log.d("Expense test", expenseRecords.get(0).getNote());
             }
         }
     }
-
 }
