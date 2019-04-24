@@ -1,5 +1,6 @@
 package com.example.budget2.ui;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -31,9 +32,8 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
     private int mCategory;
     private String mCategoryS;
     private EditText mCategoryE;
-    private String mSubcategory, mNote;
+    private String mSubcategoryS, mNoteS;
     private EditText mSubcategoryE, mNoteE;
-    //private Date mDate;
     private String mDateS;
     private Button mButtonDateE;
     private Expense mExpense;
@@ -71,6 +71,8 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
             public void onClick(View v) {
                 mAmountS = mAmountE.getText().toString();
                 mCategoryS = mCategoryE.getText().toString();
+                mSubcategoryS = mSubcategoryE.getText().toString();
+                mNoteS = mNoteE.getText().toString();
                 //TODO make date picker widget
                 try{
                     mAmount = Double.parseDouble(mAmountS);
@@ -82,8 +84,10 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                     finish();
                 }
 
-
+                mExpense = new Expense(mAmount, mDateS, mCategory, mNoteS, mSubcategoryS);
                 Intent resultIntent = new Intent();
+                resultIntent.putExtra("Expense", mExpense);
+                setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });

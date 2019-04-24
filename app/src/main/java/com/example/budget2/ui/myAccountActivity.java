@@ -21,9 +21,11 @@ public class myAccountActivity extends AppCompatActivity {
     private Button mLogoutButton;
     private Button mAddExpensesButton;
     private GraphView graph;
+    private Expense tempExpense;
     static final int ADD_EXPENSE_REQUEST = 1;
     //this must be of type ArrayList, you cannot use the List interface because of the putParcelableArrayListExtra method
     public ArrayList<Expense> expenseRecords;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +61,26 @@ public class myAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent expenseIntent = new Intent(myAccountActivity.this, ExpenseActivity.class);
-                expenseIntent.putParcelableArrayListExtra("expenseRecords", expenseRecords);
+                //expenseIntent.putParcelableArrayListExtra("expenseRecords", expenseRecords);
                 startActivityForResult(expenseIntent, ADD_EXPENSE_REQUEST);
+                expenseRecords.add(tempExpense);
             }
         });
+
 
     }
 
     private void signOut() {
         mAuth.signOut();
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ADD_EXPENSE_REQUEST){
+            if(resultCode == RESULT_OK){
+                tempExpense = data.getParcelableExtra("Expense");
+            }
+        }
+    }
 
 }

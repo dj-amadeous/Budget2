@@ -3,26 +3,25 @@ package com.example.budget2.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
 
 public class Expense implements Parcelable {
-    private int amount;
-    private Date date;
-    private int Category;
+    private double amount;
+    private String date;
+    private int category;
     private String note;
     private String subCategory;
 
-    public Expense(int amount, Date date, int category, String note, String subCategory) {
+    public Expense(double amount, String date, int category, String note, String subCategory) {
         this.amount = amount;
         this.date = date;
-        Category = category;
+        this.category = category;
         this.note = note;
         this.subCategory = subCategory;
     }
 
     protected Expense(Parcel in) {
-        amount = in.readInt();
-        Category = in.readInt();
+        amount = in.readDouble();
+        category = in.readInt();
         note = in.readString();
         subCategory = in.readString();
     }
@@ -42,20 +41,20 @@ public class Expense implements Parcelable {
     public void setAmount(int amount) {
         this.amount = amount;
     }
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
     public int getCategory() {
-        return Category;
+        return category;
     }
     public void setCategory(int category) {
-        Category = category;
+        category = category;
     }
     public String getNote() {
         return note;
@@ -77,8 +76,8 @@ public class Expense implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(amount);
-        dest.writeInt(Category);
+        dest.writeDouble(amount);
+        dest.writeInt(category);
         dest.writeString(note);
         dest.writeString(subCategory);
     }
