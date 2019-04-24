@@ -1,19 +1,29 @@
 package com.example.budget2.ui;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import com.example.budget2.R;
+import com.example.budget2.model.DatePickerFragment;
 import com.example.budget2.model.Expense;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
-public class ExpenseActivity extends AppCompatActivity {
+public class ExpenseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private Button mButtonCancel, mButtonSave;
     private double mAmount;
     private String mAmountS;
@@ -23,9 +33,9 @@ public class ExpenseActivity extends AppCompatActivity {
     private EditText mCategoryE;
     private String mSubcategory, mNote;
     private EditText mSubcategoryE, mNoteE;
-    private Date mDate;
+    //private Date mDate;
     private String mDateS;
-    private Button mDateE;
+    private Button mButtonDateE;
     private Expense mExpense;
 
     @Override
@@ -35,11 +45,11 @@ public class ExpenseActivity extends AppCompatActivity {
 
         mButtonCancel = (Button)findViewById(R.id.cancelButton);
         mButtonSave = (Button)findViewById(R.id.save);
+        mButtonDateE = (Button)findViewById(R.id.date);
         mAmountE = (EditText)findViewById(R.id.amount);
         mCategoryE = (EditText)findViewById(R.id.category);
         mSubcategoryE = (EditText)findViewById(R.id.subcategory);
         mNoteE = (EditText)findViewById(R.id.note);
-        mDateE = (Button)findViewById(R.id.date);
 
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,11 +58,20 @@ public class ExpenseActivity extends AppCompatActivity {
             }
         });
 
+        mButtonDateE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+
         mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAmountS = mAmountE.getText().toString();
                 mCategoryS = mCategoryE.getText().toString();
+                //TODO make date picker widget
                 try{
                     mAmount = Double.parseDouble(mAmountS);
                     mCategory = Integer.parseInt(mCategoryS);
@@ -70,5 +89,19 @@ public class ExpenseActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day){
+        Integer yearI = year;
+        Integer monthI = month;
+        Integer dayOfMonthI = day;
+
+        String yearS = yearI.toString();
+        String monthS = monthI.toString();
+        String dayOfMonthS = dayOfMonthI.toString();
+
+        String finalDate = yearS + "," + monthS + "," + dayOfMonthS;
+        this.mDateS = finalDate;
     }
 }
