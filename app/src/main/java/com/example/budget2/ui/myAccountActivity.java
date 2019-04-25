@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.example.budget2.R;
 import com.example.budget2.model.Expense;
+import com.example.budget2.model.Income;
 import com.example.budget2.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,14 +32,21 @@ public class myAccountActivity extends AppCompatActivity {
     private Button mLogoutButton;
     private Button mAddExpensesButton;
     private Button mStatsButton;
+    private Button mIncomeButton;
+
     private GraphView graph;
     private Expense tempExpense;
     static final int ADD_EXPENSE_REQUEST = 1;
     public static Integer EXPENSE_ID = 0;
+    private Income tempIncome;
+    static final int ADD_INCOME_REQUEST = 2;
+    public static Integer INCOME_ID = 0;
     //this must be of type ArrayList, you cannot use the List interface because of the putParcelableArrayListExtra method
     public ArrayList<Expense> expenseRecords;
+    public ArrayList<Income> incomeRecords;
     DatabaseReference mRootRef =  FirebaseDatabase.getInstance().getReference();
     DatabaseReference mChildRef = mRootRef.child("Expenses");
+
     FirebaseDatabase database;
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -51,6 +59,7 @@ public class myAccountActivity extends AppCompatActivity {
         mLogoutButton = (Button)findViewById(R.id.logOutButton);
         mAddExpensesButton = (Button)findViewById(R.id.expenseButton);
         mStatsButton = (Button)findViewById(R.id.statsButton);
+        mIncomeButton = (Button)findViewById(R.id.incomeButton);
         graph = (GraphView)findViewById(R.id.graph);
         expenseRecords = new ArrayList<Expense>();
         database = mChildRef.getDatabase();
@@ -87,6 +96,15 @@ public class myAccountActivity extends AppCompatActivity {
                 Intent statsIntent = new Intent(myAccountActivity.this, viewStatsActivity.class);
                 statsIntent.putParcelableArrayListExtra("expenseList", expenseRecords);
                 startActivity(statsIntent);
+            }
+        });
+
+        mIncomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent incomeIntent = new Intent(myAccountActivity.this, IncomeActivity.class);
+                startActivityForResult(incomeIntent, ADD_INCOME_REQUEST);
+                //Log.d("Expense test", expenseRecords.get(0).getNote());
             }
         });
     }
@@ -131,5 +149,18 @@ public class myAccountActivity extends AppCompatActivity {
 
             }
         }
+
+        if(requestCode == ADD_INCOME_REQUEST){
+            if(resultCode == RESULT_OK){
+
+                tempIncome = data.getParcelableExtra("Income");
+                incomeRecords.add(tempIncome);
+                mRootRef.child("Incomes").child(tempIncome.getId().toString()).setValue(tempIncome);
+
+            }
+        }
+
+
+
     }
 }

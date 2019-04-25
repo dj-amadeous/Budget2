@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.example.budget2.R;
 import com.example.budget2.model.DatePickerFragment;
-import com.example.budget2.model.Expense;
+import com.example.budget2.model.Income;
 
 public class IncomeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private Button mButtonCancel, mButtonSave;
@@ -28,12 +28,12 @@ public class IncomeActivity extends AppCompatActivity implements DatePickerDialo
     private EditText mSubcategoryE, mNoteE;
     private String mDateS;
     private Button mButtonDateE;
-    private Expense mExpense;
+    private Income mIncome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expense);
+        setContentView(R.layout.activity_income);
 
         mButtonCancel = (Button)findViewById(R.id.cancelButton);
         mButtonSave = (Button)findViewById(R.id.save);
@@ -76,9 +76,9 @@ public class IncomeActivity extends AppCompatActivity implements DatePickerDialo
                     finish();
                 }
 
-                mExpense = new Expense(mAmount, mDateS, mCategory, mNoteS, mSubcategoryS, ++myAccountActivity.EXPENSE_ID);
+                mIncome = new Income(mAmount, mDateS, mCategory, mNoteS, mSubcategoryS, ++myAccountActivity.INCOME_ID);
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("Expense", mExpense);
+                resultIntent.putExtra("Income", mIncome);
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
