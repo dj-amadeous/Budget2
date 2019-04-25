@@ -30,6 +30,7 @@ public class myAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button mLogoutButton;
     private Button mAddExpensesButton;
+    private Button mStatsButton;
     private GraphView graph;
     private Expense tempExpense;
     static final int ADD_EXPENSE_REQUEST = 1;
@@ -49,45 +50,10 @@ public class myAccountActivity extends AppCompatActivity {
 
         mLogoutButton = (Button)findViewById(R.id.logOutButton);
         mAddExpensesButton = (Button)findViewById(R.id.expenseButton);
+        mStatsButton = (Button)findViewById(R.id.statsButton);
         graph = (GraphView)findViewById(R.id.graph);
         expenseRecords = new ArrayList<Expense>();
         database = mChildRef.getDatabase();
-        //boolean workingDatabase = database.;
-
-        //long numRecords = mRootRef.child("Expense").getChildrenCount();
-
-
-        //method call needs to fill array list, and hold expense records in the database
-        //fillExpenseRecords();
-
-        /*ValueEventListener expenseListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                expenseRecords.clear();
-
-                DataSnapshot expensesSnapshot = dataSnapshot.child("Expense");
-                Iterable<DataSnapshot> expenseChildren = expensesSnapshot.getChildren();
-
-                for(DataSnapshot expense : expenseChildren){
-
-                    Expense e = expense.getValue(Expense.class);
-                    expenseRecords.add(e);
-
-                    Log.d("Expense debug", expenseRecords.get(0).getNote());
-                }
-            }
-            //mRootRef.addValueListener(expenseListener);
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };*/
-
-
-
-
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
                 new DataPoint(0, 1),
@@ -114,6 +80,15 @@ public class myAccountActivity extends AppCompatActivity {
                 //Log.d("Expense test", expenseRecords.get(0).getNote());
             }
         });
+
+        mStatsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent statsIntent = new Intent(myAccountActivity.this, viewStatsActivity.class);
+                statsIntent.putParcelableArrayListExtra("expenseList", expenseRecords);
+                startActivity(statsIntent);
+            }
+        });
     }
 
     @Override
@@ -130,7 +105,7 @@ public class myAccountActivity extends AppCompatActivity {
                     Expense e = expense.getValue(Expense.class);
                     expenseRecords.add(e);
 
-                    Log.d("Expense debug", expenseRecords.get(0).getNote());
+                    //Log.d("Expense debug", expenseRecords.get(0).getNote());
                 }
             }
 
@@ -141,38 +116,6 @@ public class myAccountActivity extends AppCompatActivity {
         };
     }
 
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-
-        ValueEventListener expenseListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                expenseRecords.clear();
-
-                DataSnapshot expensesSnapshot = dataSnapshot.child("Expense");
-                Iterable<DataSnapshot> expenseChildren = expensesSnapshot.getChildren();
-                for (DataSnapshot expense : expenseChildren) {
-                    Expense e = expense.getValue(Expense.class);
-                    expenseRecords.add(e);
-
-                    Log.d("Expense debug", expenseRecords.get(0).getNote());
-                }
-
-                @Override
-                public void onCancelled (@NonNull DatabaseError databaseError){
-
-                }
-            }
-        }
-    }*/
-
-    //I'm trying ot figure out some way to hold the state of the number of expense records in the database
-    /*private void fillExpenseRecords(ArrayList<Expense> expenseRecords) {
-        int i;
-        for(i = 0; i < )
-    }*/
-
     private void signOut() {
         mAuth.signOut();
     }
@@ -181,7 +124,9 @@ public class myAccountActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == ADD_EXPENSE_REQUEST){
             if(resultCode == RESULT_OK){
+
                 tempExpense = data.getParcelableExtra("Expense");
+                expenseRecords.add(tempExpense);
                 mRootRef.child("Expenses").child(tempExpense.getId().toString()).setValue(tempExpense);
 
             }
