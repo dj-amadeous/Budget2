@@ -1,6 +1,8 @@
 package com.example.budget2.ui;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +11,14 @@ import android.widget.Button;
 
 import com.example.budget2.R;
 import com.example.budget2.model.Expense;
+import com.example.budget2.model.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -30,7 +37,9 @@ public class myAccountActivity extends AppCompatActivity {
     //this must be of type ArrayList, you cannot use the List interface because of the putParcelableArrayListExtra method
     public ArrayList<Expense> expenseRecords;
     DatabaseReference mRootRef =  FirebaseDatabase.getInstance().getReference();
-
+    DatabaseReference mChildRef = mRootRef.child("Expenses");
+    FirebaseDatabase database;
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +51,42 @@ public class myAccountActivity extends AppCompatActivity {
         mAddExpensesButton = (Button)findViewById(R.id.expenseButton);
         graph = (GraphView)findViewById(R.id.graph);
         expenseRecords = new ArrayList<Expense>();
+        database = mChildRef.getDatabase();
+        //boolean workingDatabase = database.;
+
+        //long numRecords = mRootRef.child("Expense").getChildrenCount();
 
 
-        mRootRef.setValue("Hello, world");
+        //method call needs to fill array list, and hold expense records in the database
+        //fillExpenseRecords();
+
+        /*ValueEventListener expenseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                expenseRecords.clear();
+
+                DataSnapshot expensesSnapshot = dataSnapshot.child("Expense");
+                Iterable<DataSnapshot> expenseChildren = expensesSnapshot.getChildren();
+
+                for(DataSnapshot expense : expenseChildren){
+
+                    Expense e = expense.getValue(Expense.class);
+                    expenseRecords.add(e);
+
+                    Log.d("Expense debug", expenseRecords.get(0).getNote());
+                }
+            }
+            //mRootRef.addValueListener(expenseListener);
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };*/
+
+
+
 
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
@@ -69,14 +111,67 @@ public class myAccountActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent expenseIntent = new Intent(myAccountActivity.this, ExpenseActivity.class);
                 startActivityForResult(expenseIntent, ADD_EXPENSE_REQUEST);
-
-
                 //Log.d("Expense test", expenseRecords.get(0).getNote());
             }
         });
-
-
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ValueEventListener expenseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                expenseRecords.clear();
+
+                DataSnapshot expensesSnapshot = dataSnapshot.child("Expense");
+                Iterable<DataSnapshot> expenseChildren = expensesSnapshot.getChildren();
+                for(DataSnapshot expense : expenseChildren) {
+                    Expense e = expense.getValue(Expense.class);
+                    expenseRecords.add(e);
+
+                    Log.d("Expense debug", expenseRecords.get(0).getNote());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+
+        ValueEventListener expenseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                expenseRecords.clear();
+
+                DataSnapshot expensesSnapshot = dataSnapshot.child("Expense");
+                Iterable<DataSnapshot> expenseChildren = expensesSnapshot.getChildren();
+                for (DataSnapshot expense : expenseChildren) {
+                    Expense e = expense.getValue(Expense.class);
+                    expenseRecords.add(e);
+
+                    Log.d("Expense debug", expenseRecords.get(0).getNote());
+                }
+
+                @Override
+                public void onCancelled (@NonNull DatabaseError databaseError){
+
+                }
+            }
+        }
+    }*/
+
+    //I'm trying ot figure out some way to hold the state of the number of expense records in the database
+    /*private void fillExpenseRecords(ArrayList<Expense> expenseRecords) {
+        int i;
+        for(i = 0; i < )
+    }*/
 
     private void signOut() {
         mAuth.signOut();
@@ -87,9 +182,6 @@ public class myAccountActivity extends AppCompatActivity {
         if(requestCode == ADD_EXPENSE_REQUEST){
             if(resultCode == RESULT_OK){
                 tempExpense = data.getParcelableExtra("Expense");
-                //expenseRecords.add(tempExpense);
-                //Log.d("Expense test", expenseRecords.get(0).getNote());
-                //TODO push temp expense to the database right here
                 mRootRef.child("Expenses").child(tempExpense.getId().toString()).setValue(tempExpense);
 
             }
