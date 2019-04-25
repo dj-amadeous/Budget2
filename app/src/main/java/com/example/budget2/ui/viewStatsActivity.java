@@ -36,6 +36,16 @@ public class viewStatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_stats);
 
         cancelButton = (Button)findViewById(R.id.cancelButton);
+
+
+        //jihuiohiouhiouhiuo
+
+        // make userDumb object with userDumb messages
+
+        //(total monthly income - current expenses        /      30 - days passed) categorized by needs/wants/saves
+        //search function
+        //display overall income, allowances per category, daily allowance per category
+
         firstText = (TextView) findViewById(R.id.firstText);
 
 
