@@ -7,17 +7,15 @@ import android.os.Parcelable;
 public class Income implements Parcelable {
     private double amount;
     private String date;
-    private int category;
+    private int category; //0-one-time    1-monthly
     private String note;
-    private String subCategory;
     Integer id;
 
-    public Income(double amount, String date, int category, String note, String subCategory, Integer id) {
+    public Income(double amount, String date, int category, String note, Integer id) {
         this.amount = amount;
         this.date = date;
         this.category = category;
         this.note = note;
-        this.subCategory = subCategory;
         this.id = id;
     }
 
@@ -25,7 +23,6 @@ public class Income implements Parcelable {
         amount = in.readDouble();
         category = in.readInt();
         note = in.readString();
-        subCategory = in.readString();
         id = in.readInt();
     }
 
@@ -65,12 +62,6 @@ public class Income implements Parcelable {
     public void setNote(String note) {
         this.note = note;
     }
-    public String getSubCategory() {
-        return subCategory;
-    }
-    public void setSubCategory(String subCategory) {
-        this.subCategory = subCategory;
-    }
     public Integer getId() {return id;}
 
 
@@ -84,7 +75,6 @@ public class Income implements Parcelable {
         dest.writeDouble(amount);
         dest.writeInt(category);
         dest.writeString(note);
-        dest.writeString(subCategory);
         dest.writeInt(id);
     }
 }

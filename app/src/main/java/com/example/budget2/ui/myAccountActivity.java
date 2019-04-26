@@ -62,6 +62,7 @@ public class myAccountActivity extends AppCompatActivity {
         mIncomeButton = (Button)findViewById(R.id.incomeButton);
         graph = (GraphView)findViewById(R.id.graph);
         expenseRecords = new ArrayList<Expense>();
+        incomeRecords = new ArrayList<Income>();
         database = mChildRef.getDatabase();
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
@@ -94,7 +95,13 @@ public class myAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent statsIntent = new Intent(myAccountActivity.this, viewStatsActivity.class);
-                statsIntent.putParcelableArrayListExtra("expenseList", expenseRecords);
+                //statsIntent.putParcelableArrayListExtra("expenseList", expenseRecords);
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("expenseList", expenseRecords);
+                bundle.putParcelableArrayList("incomeList", incomeRecords);
+                statsIntent.putExtras(bundle);
+
                 startActivity(statsIntent);
             }
         });

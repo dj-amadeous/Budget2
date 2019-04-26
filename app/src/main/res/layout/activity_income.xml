@@ -7,7 +7,7 @@
     tools:context=".ui.IncomeActivity">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayout2"
         android:layout_width="249dp"
         android:layout_height="290dp"
         android:layout_marginStart="8dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/amount"
+            android:id="@+id/amount2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -31,7 +31,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/category"
+            android:id="@+id/category2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -40,25 +40,15 @@
             android:hint="category"
             android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/subcategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edit_text_back_ground_green"
-            android:ems="10"
-            android:hint="Subcategory (optional)"
-            android:inputType="textPersonName" />
-
         <Button
-            android:id="@+id/date"
+            android:id="@+id/date2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="Date" />
 
         <EditText
-            android:id="@+id/note"
+            android:id="@+id/note2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -80,10 +70,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <Button
-            android:id="@+id/save"
+            android:id="@+id/save2"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +82,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <Button
-            android:id="@+id/cancelButton"
+            android:id="@+id/cancelButton2"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

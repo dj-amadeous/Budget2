@@ -23,6 +23,7 @@ public class Expense implements Parcelable {
 
     protected Expense(Parcel in) {
         amount = in.readDouble();
+        date = in.readString();
         category = in.readInt();
         note = in.readString();
         subCategory = in.readString();
@@ -82,6 +83,7 @@ public class Expense implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(amount);
+        dest.writeString(date);
         dest.writeInt(category);
         dest.writeString(note);
         dest.writeString(subCategory);

@@ -24,8 +24,8 @@ public class IncomeActivity extends AppCompatActivity implements DatePickerDialo
     private int mCategory;
     private String mCategoryS;
     private EditText mCategoryE;
-    private String mSubcategoryS, mNoteS;
-    private EditText mSubcategoryE, mNoteE;
+    private String mNoteS;
+    private EditText mNoteE;
     private String mDateS;
     private Button mButtonDateE;
     private Income mIncome;
@@ -35,13 +35,12 @@ public class IncomeActivity extends AppCompatActivity implements DatePickerDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_income);
 
-        mButtonCancel = (Button)findViewById(R.id.cancelButton);
-        mButtonSave = (Button)findViewById(R.id.save);
-        mButtonDateE = (Button)findViewById(R.id.date);
-        mAmountE = (EditText)findViewById(R.id.amount);
-        mCategoryE = (EditText)findViewById(R.id.category);
-        mSubcategoryE = (EditText)findViewById(R.id.subcategory);
-        mNoteE = (EditText)findViewById(R.id.note);
+        mButtonCancel = (Button)findViewById(R.id.cancelButton2);
+        mButtonSave = (Button)findViewById(R.id.save2);
+        mButtonDateE = (Button)findViewById(R.id.date2);
+        mAmountE = (EditText)findViewById(R.id.amount2);
+        mCategoryE = (EditText)findViewById(R.id.category2);
+        mNoteE = (EditText)findViewById(R.id.note2);
 
         mButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +62,6 @@ public class IncomeActivity extends AppCompatActivity implements DatePickerDialo
             public void onClick(View v) {
                 mAmountS = mAmountE.getText().toString();
                 mCategoryS = mCategoryE.getText().toString();
-                mSubcategoryS = mSubcategoryE.getText().toString();
                 mNoteS = mNoteE.getText().toString();
                 //TODO make date picker widget
                 try{
@@ -76,7 +74,7 @@ public class IncomeActivity extends AppCompatActivity implements DatePickerDialo
                     finish();
                 }
 
-                mIncome = new Income(mAmount, mDateS, mCategory, mNoteS, mSubcategoryS, ++myAccountActivity.INCOME_ID);
+                mIncome = new Income(mAmount, mDateS, mCategory, mNoteS, ++myAccountActivity.INCOME_ID);
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("Income", mIncome);
                 setResult(Activity.RESULT_OK, resultIntent);

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.budget2.R;
 import com.example.budget2.model.Expense;
+import com.example.budget2.model.Income;
 import com.example.budget2.model.FirebaseDatabaseHelper;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jjoe64.graphview.GraphView;
@@ -24,7 +25,9 @@ import java.util.ArrayList;
 
 public class viewStatsActivity extends AppCompatActivity {
     private ArrayList<Expense> expenseList;
+    private ArrayList<Income> incomeList;
     private Button cancelButton;
+    private Button demoButton;
     private TextView firstText;
     private GraphView graph;
 
@@ -36,6 +39,7 @@ public class viewStatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_stats);
 
         cancelButton = (Button)findViewById(R.id.cancelButton);
+        demoButton = (Button)findViewById(R.id.demoButton);
 
 
         //jihuiohiouhiouhiuo
@@ -51,66 +55,14 @@ public class viewStatsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        expenseList = intent.getParcelableArrayListExtra("expenseList");
+        Bundle bundle = getIntent().getExtras();
 
-        easterEgg();
+        expenseList = bundle.getParcelableArrayList("expenseList");
+        incomeList = bundle.getParcelableArrayList("incomeList");
 
+        //easterEgg();
 
-
-        double ewantsSum=0;
-        double eneedsSum=0;
-        double esavesSum=0;
-        double iwantsSum=0;
-        double ineedsSum=0;
-        double isavesSum=0;
-
-
-
-        if(expenseList.size() > 0){
-            firstText.setText(expenseList.get(0).getNote());
-            for (Expense e : expenseList) {
-                if (e.getCategory() == 1) // wants
-                {
-                    ewantsSum += e.getAmount();
-                }
-                if (e.getCategory() == 2) // needs
-                {
-                    eneedsSum += e.getAmount();
-                }
-                if (e.getCategory() == 3) // saves
-                {
-                    esavesSum += e.getAmount();
-                }
-            }
-        }
-
-            graph = (GraphView)findViewById(R.id.graph);
-
-            BarGraphSeries<DataPoint> series1 = new BarGraphSeries<>(new DataPoint[]{
-                    new DataPoint(1, ewantsSum),
-                    new DataPoint(3, eneedsSum),
-                    new DataPoint(5, esavesSum),});
-
-        BarGraphSeries<DataPoint> series2 = new BarGraphSeries<>(new DataPoint[]{
-                    new DataPoint(2, totalIncome * .5),
-                    new DataPoint(4, totalIncome * .3),
-                    new DataPoint(6, totalIncome * .2)
-            });
-
-            graph.addSeries(series1);
-            graph.addSeries(series2);
-            series1.setColor(Color.GREEN);
-            series1.setSpacing(50);
-            series2.setSpacing(50);
-
-
-            //Paint p = new Paint();
-            //p.setColor(Color.BLUE);
-            //series1.setCustomPaint(p);
-            //p.setColor(Color.RED);
-            //series2.setCustomPaint(p);
-
-
+        makeGraph();
 
 
         /*FirebaseDatabaseHelper helper = new FirebaseDatabaseHelper();
@@ -122,11 +74,97 @@ public class viewStatsActivity extends AppCompatActivity {
                 finish();
             }
         });
+        demoButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                easterEgg();
+                makeGraph();
+            }
+        });
 
 
 
 
     }
+
+
+    public void makeGraph() {
+
+
+        double ewantsSum=0;
+        double eneedsSum=0;
+        double esavesSum=0;
+        double iwantsSum=0;
+        double ineedsSum=0;
+        double isavesSum=0;
+
+        if(expenseList.size() > 0){
+            firstText.setText(expenseList.get(0).getNote());
+            for (Expense e : expenseList) {
+                if (e.getCategory() == 1) // wants
+                {
+                    ewantsSum += e.getAmount();
+                }
+                else if (e.getCategory() == 2) // needs
+                {
+                    eneedsSum += e.getAmount();
+                }
+                else if (e.getCategory() == 3) // saves
+                {
+                    esavesSum += e.getAmount();
+                }
+            }
+        }
+
+        if(incomeList.size() > 0){
+            for(Income i : incomeList){
+                if(i.getCategory()==1){
+                    totalIncome+=i.getAmount();
+                }
+                if(i.getCategory()==2){
+                    int months = 0;
+
+                    String s = i.getDate();
+                    int month = s.charAt(5);
+
+                    if(s.charAt(5)==1) {
+                        if (s.charAt(6) == 0) {
+                            //oct
+                        }
+                    }
+
+
+                    totalIncome+=(months*i.getAmount());
+                }
+            }
+        }
+
+
+        graph = (GraphView) findViewById(R.id.graph);
+
+        BarGraphSeries<DataPoint> series1 = new BarGraphSeries<>(new DataPoint[]{
+                new DataPoint(1, ewantsSum),
+                new DataPoint(3, eneedsSum),
+                new DataPoint(5, esavesSum),});
+
+        BarGraphSeries<DataPoint> series2 = new BarGraphSeries<>(new DataPoint[]{
+                new DataPoint(2, totalIncome * .5),
+                new DataPoint(4, totalIncome * .3),
+                new DataPoint(6, totalIncome * .2)
+        });
+
+        graph.addSeries(series1);
+        graph.addSeries(series2);
+        series1.setColor(Color.GREEN);
+        series1.setSpacing(50);
+        series2.setSpacing(50);
+
+
+    }
+
+
 
     public void easterEgg(){
 
