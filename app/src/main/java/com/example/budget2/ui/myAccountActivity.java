@@ -69,7 +69,6 @@ public class myAccountActivity extends AppCompatActivity {
         mNameText = (TextView)findViewById(R.id.nameTextView);
         mProfessionText = (TextView)findViewById(R.id.professionTextView);
         mUTAIDText = (TextView)findViewById(R.id.utaIDTextView);
-        //graph = (GraphView)findViewById(R.id.graph);
         expenseRecords = new ArrayList<Expense>();
         incomeRecords = new ArrayList<Income>();
         database = mChildRef.getDatabase();
@@ -133,14 +132,11 @@ public class myAccountActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 expenseRecords.clear();
-
                 DataSnapshot expensesSnapshot = dataSnapshot.child("Expense");
                 Iterable<DataSnapshot> expenseChildren = expensesSnapshot.getChildren();
                 for(DataSnapshot expense : expenseChildren) {
                     Expense e = expense.getValue(Expense.class);
                     expenseRecords.add(e);
-
-                    //Log.d("Expense debug", expenseRecords.get(0).getNote());
                 }
             }
 
@@ -166,7 +162,6 @@ public class myAccountActivity extends AppCompatActivity {
 
             }
         }
-
         if(requestCode == ADD_INCOME_REQUEST){
             if(resultCode == RESULT_OK){
 
@@ -176,23 +171,13 @@ public class myAccountActivity extends AppCompatActivity {
 
             }
         }
-
         if (requestCode == EDIT_PROFILE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 mUser = data.getParcelableExtra("user");
-                /*(mNameText.setText(mUser.getName());
-                mProfessionText.setText(mUser.getProfession());
-                mUTAIDText.setText(mUser.getUtaID().toString());*/
             }
         }
-
-
         displayUser();
-
-
-
     }
-
     private void displayUser() {
         if(mUser != null){
             mNameText.setText(mUser.getName());

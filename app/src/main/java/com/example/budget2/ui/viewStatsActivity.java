@@ -21,53 +21,56 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class viewStatsActivity extends AppCompatActivity {
     private ArrayList<Expense> expenseList;
     private ArrayList<Income> incomeList;
     private Button cancelButton;
     private Button demoButton;
-    private TextView firstText;
+    private TextView totalIncomeTextView;
+    private TextView monthlyWantsTextView;
+    private TextView monthlyNeedsTextView;
+    private TextView monthlySavesTextView;
+    private TextView dailyWantsTextView;
+    private TextView dailyNeedsTextView;
+    private TextView dailySavesTextView;
     private GraphView graph;
 
-    double totalIncome = 0;
+    private double totalIncome = 0;
+    private double ewantsSum=0;
+    private double eneedsSum=0;
+    private double esavesSum=0;
+    private double iwantsSum=0;
+    private double ineedsSum=0;
+    private double isavesSum=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_stats);
-
         cancelButton = (Button)findViewById(R.id.cancelButton);
         demoButton = (Button)findViewById(R.id.demoButton);
+        totalIncomeTextView = (TextView)findViewById(R.id.totalIncomeTextView);
+        monthlyWantsTextView = (TextView)findViewById(R.id.monthlyWantsTextView);
+        monthlyNeedsTextView = (TextView)findViewById(R.id.monthlyNeedsTextView);
+        monthlySavesTextView = (TextView)findViewById(R.id.monthlySavesTextView);
+        dailyWantsTextView = (TextView)findViewById(R.id.dailyWantsTextView);
+        dailyNeedsTextView = (TextView)findViewById(R.id.dailyNeedsTextView);
+        dailySavesTextView = (TextView)findViewById(R.id.dailySavesTextView);
 
-
-        //jihuiohiouhiouhiuo
-
-        // make userDumb object with userDumb messages
-
-        //(total monthly income - current expenses        /      30 - days passed) categorized by needs/wants/saves
-        //search function
-        //display overall income, allowances per category, daily allowance per category
-
-        firstText = (TextView) findViewById(R.id.firstText);
-
-
+        getSupportActionBar().hide();
         Intent intent = getIntent();
-
         Bundle bundle = getIntent().getExtras();
-
         expenseList = bundle.getParcelableArrayList("expenseList");
         incomeList = bundle.getParcelableArrayList("incomeList");
-
-        //easterEgg();
-
         makeGraph();
 
+        updateStats();
 
-        /*FirebaseDatabaseHelper helper = new FirebaseDatabaseHelper();
-        helper.ReadExpenses();
-        helper.getExpenseList();*/
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,27 +84,48 @@ public class viewStatsActivity extends AppCompatActivity {
 
                 easterEgg();
                 makeGraph();
+                updateStats();
             }
         });
-
-
-
-
     }
 
+    private void updateStats() {
+        int daysUntilEnd = getDatesUntilEndOfMonth();
+        Double tempTotalIncome = totalIncome;
+        Double remainingMonthlyWants = totalIncome - ewantsSum;
+        Double remainingMonthlyNeeds = totalIncome - eneedsSum;
+        Double remainingMonthlySaves = totalIncome - esavesSum;
+        Double remainingDailyWants = (totalIncome - ewantsSum)/daysUntilEnd;
+        Double remainingDailyNeeds = (totalIncome - eneedsSum)/daysUntilEnd;
+        Double remainingDailySaves = (totalIncome - esavesSum)/daysUntilEnd;
+
+        totalIncomeTextView.setText(tempTotalIncome.toString());
+        monthlyWantsTextView.setText(remainingMonthlyWants.toString());
+        monthlyNeedsTextView.setText(remainingMonthlyNeeds.toString());
+        monthlySavesTextView.setText(remainingMonthlySaves.toString());
+        dailyWantsTextView.setText(remainingDailyWants.toString());
+        dailyNeedsTextView.setText(remainingDailyNeeds.toString());
+        dailySavesTextView.setText(remainingDailySaves.toString());
+    }
+
+    private int getDatesUntilEndOfMonth() {
+        Calendar c = Calendar.getInstance();
+        int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int daysInMonth;
+        if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+            daysInMonth = 31;
+        } else if (month == 2){
+            daysInMonth = 28;
+        } else {
+            daysInMonth = 30;
+        }
+        return daysInMonth - dayOfMonth;
+    }
 
     public void makeGraph() {
 
-
-        double ewantsSum=0;
-        double eneedsSum=0;
-        double esavesSum=0;
-        double iwantsSum=0;
-        double ineedsSum=0;
-        double isavesSum=0;
-
         if(expenseList.size() > 0){
-            firstText.setText(expenseList.get(0).getNote());
             for (Expense e : expenseList) {
                 if (e.getCategory() == 1) // wants
                 {
@@ -117,7 +141,6 @@ public class viewStatsActivity extends AppCompatActivity {
                 }
             }
         }
-
         if(incomeList.size() > 0){
             for(Income i : incomeList){
                 if(i.getCategory()==1){
@@ -134,8 +157,6 @@ public class viewStatsActivity extends AppCompatActivity {
                             //oct
                         }
                     }
-
-
                     totalIncome+=(months*i.getAmount());
                 }
             }
