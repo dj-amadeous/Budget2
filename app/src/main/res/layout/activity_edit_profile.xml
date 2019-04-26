@@ -18,7 +18,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
 
         <Button
-            android:id="@+id/Save"
+            android:id="@+id/saveButtonEditP"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -61,7 +61,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/profession"
+            android:id="@+id/professionEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -71,7 +71,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/utaID"
+            android:id="@+id/utaIDEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"

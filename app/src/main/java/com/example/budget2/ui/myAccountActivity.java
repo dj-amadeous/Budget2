@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.budget2.R;
 import com.example.budget2.model.Expense;
 import com.example.budget2.model.Income;
+import com.example.budget2.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -17,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -27,6 +31,9 @@ public class myAccountActivity extends AppCompatActivity {
     private Button mStatsButton;
     private Button mIncomeButton;
     private Button mEditProfileButton;
+    private TextView mNameText;
+    private TextView mProfessionText;
+    private TextView mUTAIDText;
 
     //private GraphView graph;
 
@@ -36,6 +43,7 @@ public class myAccountActivity extends AppCompatActivity {
     public static Integer EXPENSE_ID = 0;
     private Income tempIncome;
     private Expense tempExpense;
+    private User mUser;
 
     public static Integer INCOME_ID = 0;
     //this must be of type ArrayList, you cannot use the List interface because of the putParcelableArrayListExtra method
@@ -58,19 +66,13 @@ public class myAccountActivity extends AppCompatActivity {
         mStatsButton = (Button)findViewById(R.id.statsButton);
         mIncomeButton = (Button)findViewById(R.id.incomeButton);
         mEditProfileButton = (Button)findViewById(R.id.editProfile);
+        mNameText = (TextView)findViewById(R.id.nameTextView);
+        mProfessionText = (TextView)findViewById(R.id.professionTextView);
+        mUTAIDText = (TextView)findViewById(R.id.utaIDTextView);
         //graph = (GraphView)findViewById(R.id.graph);
         expenseRecords = new ArrayList<Expense>();
         incomeRecords = new ArrayList<Income>();
         database = mChildRef.getDatabase();
-
-        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
-        });
-        graph.addSeries(series);*/
 
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +81,9 @@ public class myAccountActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        getSupportActionBar().hide();
+        displayUser();
 
         mAddExpensesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +177,28 @@ public class myAccountActivity extends AppCompatActivity {
             }
         }
 
+        if (requestCode == EDIT_PROFILE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                mUser = data.getParcelableExtra("user");
+                /*(mNameText.setText(mUser.getName());
+                mProfessionText.setText(mUser.getProfession());
+                mUTAIDText.setText(mUser.getUtaID().toString());*/
+            }
+        }
 
 
+        displayUser();
+
+
+
+    }
+
+    private void displayUser() {
+        if(mUser != null){
+            mNameText.setText(mUser.getName());
+            mProfessionText.setText(mUser.getProfession());
+            mUTAIDText.setText(mUser.getUtaID().toString());
+
+        }
     }
 }
