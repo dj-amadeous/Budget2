@@ -1,18 +1,15 @@
 package com.example.budget2.ui;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.budget2.R;
 import com.example.budget2.model.Expense;
 import com.example.budget2.model.Income;
-import com.example.budget2.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,12 +17,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class myAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -33,13 +26,17 @@ public class myAccountActivity extends AppCompatActivity {
     private Button mAddExpensesButton;
     private Button mStatsButton;
     private Button mIncomeButton;
+    private Button mEditProfileButton;
 
-    private GraphView graph;
-    private Expense tempExpense;
+    //private GraphView graph;
+
     static final int ADD_EXPENSE_REQUEST = 1;
+    static final int ADD_INCOME_REQUEST = 2;
+    static final int EDIT_PROFILE_REQUEST = 3;
     public static Integer EXPENSE_ID = 0;
     private Income tempIncome;
-    static final int ADD_INCOME_REQUEST = 2;
+    private Expense tempExpense;
+
     public static Integer INCOME_ID = 0;
     //this must be of type ArrayList, you cannot use the List interface because of the putParcelableArrayListExtra method
     public ArrayList<Expense> expenseRecords;
@@ -60,19 +57,20 @@ public class myAccountActivity extends AppCompatActivity {
         mAddExpensesButton = (Button)findViewById(R.id.expenseButton);
         mStatsButton = (Button)findViewById(R.id.statsButton);
         mIncomeButton = (Button)findViewById(R.id.incomeButton);
-        graph = (GraphView)findViewById(R.id.graph);
+        mEditProfileButton = (Button)findViewById(R.id.editProfile);
+        //graph = (GraphView)findViewById(R.id.graph);
         expenseRecords = new ArrayList<Expense>();
         incomeRecords = new ArrayList<Income>();
         database = mChildRef.getDatabase();
 
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+        /*LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
                 new DataPoint(0, 1),
                 new DataPoint(1, 5),
                 new DataPoint(2, 3),
                 new DataPoint(3, 2),
                 new DataPoint(4, 6)
         });
-        graph.addSeries(series);
+        graph.addSeries(series);*/
 
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +109,14 @@ public class myAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent incomeIntent = new Intent(myAccountActivity.this, IncomeActivity.class);
                 startActivityForResult(incomeIntent, ADD_INCOME_REQUEST);
-                //Log.d("Expense test", expenseRecords.get(0).getNote());
+            }
+        });
+
+        mEditProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(myAccountActivity.this, editProfileActivity.class);
+                startActivityForResult(profileIntent, EDIT_PROFILE_REQUEST);
             }
         });
     }

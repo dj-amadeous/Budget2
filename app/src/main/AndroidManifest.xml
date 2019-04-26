@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.editProfileActivity"></activity>
         <activity android:name=".ui.IncomeActivity" />
         <activity android:name=".ui.viewStatsActivity" />
         <activity android:name=".ui.ExpenseActivity" />

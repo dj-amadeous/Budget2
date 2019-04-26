@@ -4,36 +4,23 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class User implements Parcelable {
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
+    private String profession;
+    private String name;
+    private Integer utaID;
 
-    public void setNumRecords(Integer numRecords) {
-        this.numRecords = numRecords;
+    public User(String profession, String name, Integer utaID) {
+        this.profession = profession;
+        this.name = name;
+        this.utaID = utaID;
     }
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public Integer getNumRecords() {
-        return numRecords;
-    }
-
-    public User(String userID, Integer numRecords) {
-        this.userID = userID;
-        this.numRecords = numRecords;
-    }
-
-    private String userID;
-    private Integer numRecords;
 
     protected User(Parcel in) {
-        userID = in.readString();
+        profession = in.readString();
+        name = in.readString();
         if (in.readByte() == 0) {
-            numRecords = null;
+            utaID = null;
         } else {
-            numRecords = in.readInt();
+            utaID = in.readInt();
         }
     }
 
@@ -49,6 +36,30 @@ public class User implements Parcelable {
         }
     };
 
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getUtaID() {
+        return utaID;
+    }
+
+    public void setUtaID(Integer utaID) {
+        this.utaID = utaID;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -56,12 +67,13 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userID);
-        if (numRecords == null) {
+        dest.writeString(profession);
+        dest.writeString(name);
+        if (utaID == null) {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeInt(numRecords);
+            dest.writeInt(utaID);
         }
     }
 }
